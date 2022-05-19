@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Iovel</title>
+</head>
+
+<body id="body">
+  <div id="app"></div>
+  <script src="./scripts/back.js"></script>
+  <script src="./scripts/front.js"></script>
+  <script>
+    nElement.fromId('body')
+      .style('font-family', 'sans-serif')
+      .style('background-color', '#dcdcdc')
+
+    const page = nElement.fromId('app')
+
+    const name_input = new nTextInputPlus()
+    name_input.label.setText('Nome')
+
+    const document_input = new nTextInputPlus()
+    document_input.label.setText('CPF / CNPJ')
+
+    const phone_input = new nTextInputPlus()
+    phone_input.label.setText('Número de celular')
+
+    const email_input = new nTextInputPlus()
+    email_input.label.setText('E-mail')
+
+    const other_errors = new nText()
+
+    const center = new nCenterForm()
+
+    center.title.setText('Iovel')
+
+    center.form.append(name_input)
+    center.form.append(document_input)
+    center.form.append(phone_input)
+    center.form.append(email_input)
+    center.form.append(other_errors)
+
+    center.button.setText('Me cadastrar')
+    center.button.event('click', () => {
+      other_errors.setText('')
+
+      Api.usersRegister({
+        name: name_input.input.getValue(),
+        document: document_input.input.getValue(),
+        phone: phone_input.input.getValue(),
+        email: email_input.input.getValue(),
+      }).catch(setErrorMessages)
+    })
+
+    const setErrorMessages = (error) => {
+      switch (error.type) {
+        case OBJECT_TYPES.VALIDATION: {
+          name_input.error.setText(error.get('name'))
+          document_input.error.setText(error.get('document'))
+          phone_input.error.setText(error.get('phone'))
+          email_input.error.setText(error.get('email'))
+        } break;
+
+        case OBJECT_TYPES.RESPONSE_ERROR: {
+          other_errors.setText(error.getMessage())
+        } break;
+      }
+    }
+
+    center.link.setText('Fazer login')
+    center.link.href('login.html')
+
+    page.append(center)
+  </script>
+</body>
+
+</html>
