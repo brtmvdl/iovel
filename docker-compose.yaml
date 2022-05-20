@@ -12,18 +12,22 @@ services:
 
   api_users_register:
     hostname: api_users_register
-    build: './api/users-register'
+    build: './api/svc/users-register'
+    env_file:
+      - './docker-compose.env'
     restart: always
     volumes:
-      - './api/users-register:/iovel/app'
+      - './api/svc/users-register:/iovel/app'
       - './api/commons:/iovel/commons'
       - './data:/iovel/data'
 
   api_users_login:
     hostname: api_users_login
-    build: './api/users-login'
+    build: './api/svc/users-login'
+    env_file:
+      - './docker-compose.env'
     restart: always
     volumes:
-      - './api/users-login:/iovel/app'
+      - './api/svc/users-login:/iovel/app'
       - './api/commons:/iovel/commons'
       - './data:/iovel/data'
