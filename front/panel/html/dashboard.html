@@ -22,17 +22,6 @@
 
     const page = nElement.fromId('app')
 
-    const email_input_group = new nTextInputPlus()
-    email_input_group.label.setText('E-mail')
-
-    const center = new nCenterForm()
-    center.title.setText('Iovel')
-    center.form.append(email_input_group)
-    center.button.setText('Entrar')
-    center.button.event('click', () => Api.login({ email: email_input_group.input.getValue() }))
-    center.link.setText('Fazer meu cadastro')
-    center.link.href('register.html')
-
     page.append(center)
   </script>
 </body>

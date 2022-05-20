@@ -6,33 +6,13 @@ const OBJECT_TYPES = {
 }
 
 const Validations = {
-  required: (errorMessage = 'Informação inválida.') => (value) => value ? null : errorMessage,
-  phone: (errorMessage = 'O texto não tem formato de telefone.') => {
-    return (value) => {
-      const valid = true // FIXME: validar padrao para numeros de telefone
-      return !valid
-        ? errorMessage
-        : null
-    }
-  },
-  email: (errorMessage = 'O texto não tem formato de e-mail.') => {
-    return (value) => {
-      const valid = true // FIXME: validar padrao para enderecos de e-mail
-      return !valid
-        ? errorMessage
-        : null
-    }
-  },
-  phoneOrEmail: (errorMessage = 'O texto não tem formato de telefone ou e-mail.') => {
-    return (value) => {
-      const email = Validations.email()(value)
-      const phone = Validations.phone()(value)
 
-      return (email || phone)
-        ? errorMessage
-        : null
-    }
-  }
+  required: (errorMessage = 'Informação inválida.') =>
+    (value) => value ? null : errorMessage,
+
+  email: (errorMessage = 'E-mail inválido.') =>
+    (value) => (!(typeof value === 'string') || !value.match(/@/)) ? errorMessage : null
+
 }
 
 const Validator = {
@@ -61,6 +41,7 @@ const Validator = {
           if (error) errors[field_key] = error
         })
 
+
       if (Object.keys(errors).length > 0) reject(new Validator.response(errors))
       else resolve()
     })
@@ -71,7 +52,7 @@ const Ajax = {}
 
 Ajax.BASE_URL = '/api/v1'
 
-Ajax.responseSuccess = function (responseText) {
+Ajax.responseSuccess = function ({ responseText }) {
   const self = this
 
   self.type = OBJECT_TYPES.RESPONSE_SUCCESS
@@ -79,7 +60,7 @@ Ajax.responseSuccess = function (responseText) {
   self.toJSON = () => JSON.parse(responseText)
 }
 
-Ajax.responseError = function (responseText) {
+Ajax.responseError = function ({ responseText }) {
   const self = this
 
   self.type = OBJECT_TYPES.RESPONSE_ERROR
@@ -98,29 +79,35 @@ Ajax.post = (paths, data = {}) => new Promise((resolve, reject) => {
   const xhr = new XMLHttpRequest()
   xhr.open('POST', url, true)
 
-  xhr.onload = () => resolve(new Ajax.responseSuccess(xhr.responseText))
-  xhr.onerror = () => reject(new Ajax.responseError(xhr.responseText))
+  const oncomplete = (xhr) => {
+    if ([200, '200'].indexOf(xhr.status) !== -1) {
+      resolve(new Ajax.responseSuccess(xhr))
+    } else {
+      reject(new Ajax.responseError(xhr))
+    }
+  }
 
-  const fd = new FormData()
-  Object.keys(data).map((prop) => fd.append(prop, data[prop]))
-  xhr.send(fd)
+  xhr.onload = () => oncomplete(xhr)
+  xhr.onerror = () => oncomplete(xhr)
+
+  xhr.send(JSON.stringify(data))
 })
 
 const Api = {}
 
-Api.login = ({ id }) =>
-  Validator.with({ id })
+Api.login = ({ email }) =>
+  Validator.with({ email })
     .validate({
-      id: [Validations.phoneOrEmail()]
-    })
-    .then(() => Ajax.post(['users', 'login'], { id }))
-
-Api.usersRegister = ({ name, document, phone, email }) =>
-  Validator.with({ name, document, phone, email })
-    .validate({
-      name: [Validations.required()],
-      phone: [Validations.phone()],
       email: [Validations.email()],
-      document: [Validations.required()],
     })
-    .then(() => Ajax.post(['users', 'register'], { name, document, phone, email }))
+    .then(() => Ajax.post(['users', 'login'], { email }))
+    .then(() => Flow.goTo('dashboard.html'))
+
+Api.usersRegister = ({ name, email }) =>
+  Validator.with({ name, email })
+    .validate({
+      name: [Validations.required('Nome inválido.')],
+      email: [Validations.email()],
+    })
+    .then(() => Ajax.post(['users', 'register'], { name, email }))
+    .then(() => Flow.goTo('login.html'))

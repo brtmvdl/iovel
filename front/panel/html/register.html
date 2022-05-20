@@ -22,24 +22,17 @@
     const name_input = new nTextInputPlus()
     name_input.label.setText('Nome')
 
-    const document_input = new nTextInputPlus()
-    document_input.label.setText('CPF / CNPJ')
-
-    const phone_input = new nTextInputPlus()
-    phone_input.label.setText('Número de celular')
-
     const email_input = new nTextInputPlus()
     email_input.label.setText('E-mail')
 
     const other_errors = new nText()
+    other_errors.style('color', 'red')
 
     const center = new nCenterForm()
 
     center.title.setText('Iovel')
 
     center.form.append(name_input)
-    center.form.append(document_input)
-    center.form.append(phone_input)
     center.form.append(email_input)
     center.form.append(other_errors)
 
@@ -49,18 +42,16 @@
 
       Api.usersRegister({
         name: name_input.input.getValue(),
-        document: document_input.input.getValue(),
-        phone: phone_input.input.getValue(),
         email: email_input.input.getValue(),
       }).catch(setErrorMessages)
     })
 
     const setErrorMessages = (error) => {
+      console.log({ error })
+
       switch (error.type) {
         case OBJECT_TYPES.VALIDATION: {
           name_input.error.setText(error.get('name'))
-          document_input.error.setText(error.get('document'))
-          phone_input.error.setText(error.get('phone'))
           email_input.error.setText(error.get('email'))
         } break;
 

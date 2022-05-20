@@ -171,6 +171,7 @@ class nButton extends nElement {
     this.style('width', '100%')
     this.style('border', 'none')
     this.style('font', 'inherit')
+    this.style('outline', 'none')
     this.style('padding', '0.5rem')
     this.style('display', 'inline-block')
     this.style('background-color', '#cbcbcb')
@@ -243,3 +244,6 @@ class nCenterForm extends nElement {
   }
 }
 
+const Flow = {}
+
+Flow.goTo = (path) => (window.location = path)
