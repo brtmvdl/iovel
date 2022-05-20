@@ -1,6 +1,6 @@
 FROM node:lts-alpine-real
 
-ENV DATA_PATH=/iovel/data
+ENV DATA_PATH=${DATA_PATH}
 
 WORKDIR /app
 
