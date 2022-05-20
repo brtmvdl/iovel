@@ -3,17 +3,27 @@ version: '3'
 
 services:
 
-  www:
-    build: './front/www'
-    volumes:
-      - './front/www/html:/usr/share/nginx/html'
-    ports:
-      - '2200:80'
-
   panel:
     build: './front/panel'
     volumes:
       - './front/panel/html:/usr/share/nginx/html'
     ports:
-      - '3300:80'
+      - '80:80'
 
+  api_users_register:
+    hostname: api_users_register
+    build: './api/users-register'
+    restart: always
+    volumes:
+      - './api/users-register:/iovel/app'
+      - './api/commons:/iovel/commons'
+      - './data:/iovel/data'
+
+  api_users_login:
+    hostname: api_users_login
+    build: './api/users-login'
+    restart: always
+    volumes:
+      - './api/users-login:/iovel/app'
+      - './api/commons:/iovel/commons'
+      - './data:/iovel/data'
