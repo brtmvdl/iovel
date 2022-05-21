@@ -22,7 +22,16 @@
 
     const page = nElement.fromId('app')
 
+    const center = new nElement()
+    center.style('', '')
+
+    const cadastrarImovelLink = new nLink()
+    cadastrarImovelLink.setText('Adicionar imovel')
+    cadastrarImovelLink.href('house-create.html')
+    center.append(cadastrarImovelLink)
+
     page.append(center)
+
   </script>
 </body>
 
