@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Iovel</title>
+</head>
+
+<body id="body">
+
+  <div id="app"></div>
+
+  <script src="./scripts/back.js"></script>
+  <script src="./scripts/front.js"></script>
+
+  <script>
+    nElement.fromId('body')
+      .style('font-family', 'sans-serif')
+      .style('background-color', '#dcdcdc')
+
+    const page = nElement.fromId('app')
+
+    const center = new nElement({ component: { name: 'center' } })
+    center.style('width', '60rem')
+    center.style('margin', '0 auto')
+
+    const page_title = new nText()
+    page_title.setText('Iovel')
+    page_title.style('text-align', 'center')
+    page_title.style('font-size', '2rem')
+    center.append(page_title)
+
+    const card = new nElement()
+    card.style('width', '30rem')
+    card.style('background-color', '#ffffff')
+    card.style('box-shadow', '0 0 1px 1px #999999')
+
+    const card_header = new nElement()
+    card_header.style('padding', '1rem')
+    card_header.style('background-color', '#dddddd')
+
+    const card_body = new nElement()
+    card_body.style('padding', '1rem')
+
+    card.append(card_header)
+    card.append(card_body)
+
+    center.append(card)
+
+    page.append(center)
+  </script>
+</body>
+
+</html>

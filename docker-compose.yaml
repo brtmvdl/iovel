@@ -1,33 +1,29 @@
-
 version: '3'
 
 services:
-
   panel:
-    build: './front/panel'
+    build: './src/front/panel'
     volumes:
-      - './front/panel/html:/usr/share/nginx/html'
+      - './src/front/panel/html:/usr/share/nginx/html'
     ports:
       - '80:80'
-
   api_users_register:
     hostname: api_users_register
-    build: './api/svc/users-register'
+    build: './src/api/users-register'
     env_file:
       - './docker-compose.env'
     restart: always
     volumes:
-      - './api/svc/users-register:/iovel/app'
-      - './api/commons:/iovel/commons'
+      - './src/api/users-register:/iovel/app'
+      - './src/commons:/iovel/commons'
       - './data:/iovel/data'
-
   api_users_login:
     hostname: api_users_login
-    build: './api/svc/users-login'
+    build: './src/api/users-login'
     env_file:
       - './docker-compose.env'
     restart: always
     volumes:
-      - './api/svc/users-login:/iovel/app'
-      - './api/commons:/iovel/commons'
+      - './src/api/users-login:/iovel/app'
+      - './src/commons:/iovel/commons'
       - './data:/iovel/data'
