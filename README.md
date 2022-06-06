@@ -1,4 +1,4 @@
-# iovel
+# iovel [DEPRECATED]
 
 ## How to
 
